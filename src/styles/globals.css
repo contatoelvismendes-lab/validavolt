@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Importar Inter Font */
+@import url('https://rsms.me/inter/inter.css');
+
+/* Root Theme */
+:root {
+  --bg-dark: #0A192F;
+  --bg-card: #0F2346;
+  --border-color: #1A2844;
+  --accent: #00E676;
+  --accent-dark: #00C853;
+  --accent-light: #69F0AE;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #ADB5BD;
+  --text-tertiary: #868E96;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+}
+
+* {
+  @apply border-dark-border;
+}
+
+html {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Scrollbar customizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-card);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Input & Select base styles */
+@layer components {
+  .input-base {
+    @apply w-full px-4 py-2.5 rounded-lg bg-dark-card border border-dark-border text-white placeholder-neutral-500 transition-colors focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent focus:ring-opacity-20;
+  }
+
+  .btn-base {
+    @apply px-4 py-2.5 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-bg;
+  }
+
+  .btn-primary {
+    @apply btn-base bg-accent hover:bg-accent-dark text-dark-bg focus:ring-accent;
+  }
+
+  .btn-secondary {
+    @apply btn-base bg-dark-card border border-dark-border hover:border-accent text-white focus:ring-accent;
+  }
+
+  .btn-ghost {
+    @apply btn-base hover:bg-dark-card text-accent focus:ring-accent;
+  }
+
+  .card-base {
+    @apply rounded-xl bg-dark-card border border-dark-border p-6 transition-all;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-900/30 text-accent text-xs font-medium border border-accent/30;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-900/30 text-yellow-400 text-xs font-medium border border-yellow-600/30;
+  }
+
+  .badge-danger {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-900/30 text-red-400 text-xs font-medium border border-red-600/30;
+  }
+
+  .badge-info {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-900/30 text-blue-400 text-xs font-medium border border-blue-600/30;
+  }
+}
+
+/* Animações */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 40px rgba(0, 230, 118, 0.3);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out;
+}
+
+/* Print styles para relatório A4 */
+@media print {
+  body {
+    background: white;
+    color: black;
+    padding: 0;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .page-break {
+    page-break-after: always;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
