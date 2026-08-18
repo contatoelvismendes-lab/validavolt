@@ -81,22 +81,13 @@ export const AuthProvider = ({ children }) => {
       setError(null)
       const { data, error } = await supabase.auth.signUp({
         email,
-        password
+        password,
+        options: {
+          data: profileData
+        }
       })
 
       if (error) throw error
-
-      // Criar perfil de usuário
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .insert([{
-          id: data.user.id,
-          email,
-          ...profileData,
-          created_at: new Date().toISOString()
-        }])
-
-      if (profileError) throw profileError
 
       return { success: true, data }
     } catch (err) {

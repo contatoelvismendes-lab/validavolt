@@ -9,6 +9,7 @@ export default function SignupPage() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -48,7 +49,7 @@ export default function SignupPage() {
       )
 
       if (success) {
-        navigate('/painel')
+        setSuccess(true)
       } else {
         setError(signupError || 'Falha ao criar conta')
       }
@@ -57,6 +58,46 @@ export default function SignupPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-dark-bg flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent pointer-events-none"></div>
+        <div className="w-full max-w-md relative z-10">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-900/20 border border-green-600/30 mb-4">
+              <Mail className="w-8 h-8 text-green-400" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">ValidaVolt</h1>
+            <p className="text-neutral-400 text-sm">Verificar Email</p>
+          </div>
+
+          <div className="card-base">
+            <h2 className="text-xl font-semibold text-white mb-4">Confirme seu Email</h2>
+            <p className="text-neutral-400 mb-4">
+              Enviamos um link de confirmação para <span className="text-accent font-medium">{formData.email}</span>
+            </p>
+            <p className="text-neutral-400 text-sm mb-6">
+              Verifique sua caixa de entrada e clique no link para ativar sua conta. Após confirmar, você poderá fazer login e usar o sistema.
+            </p>
+
+            <button
+              onClick={() => navigate('/login')}
+              className="btn-primary w-full mb-3"
+            >
+              Ir para Login
+            </button>
+            <button
+              onClick={() => { setSuccess(false); setStep(1) }}
+              className="btn-secondary w-full"
+            >
+              Criar outra conta
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
