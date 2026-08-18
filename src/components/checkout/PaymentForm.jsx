@@ -6,7 +6,6 @@ import CustomerForm from './CustomerForm'
 
 export default function PaymentForm({ plan, isAuthenticated, currentUser }) {
   const [paymentMethod, setPaymentMethod] = useState('pix')
-  const [installments, setInstallments] = useState(1)
   const [customerData, setCustomerData] = useState({
     name: currentUser?.user_metadata?.full_name || '',
     email: currentUser?.email || '',
@@ -97,40 +96,11 @@ export default function PaymentForm({ plan, isAuthenticated, currentUser }) {
             >
               <Wallet className="w-6 h-6 text-accent mb-2" />
               <p className="font-semibold text-white">Cartão de Crédito</p>
-              <p className="text-xs text-neutral-400 mt-1">Até 12x</p>
+              <p className="text-xs text-neutral-400 mt-1">À vista</p>
             </button>
           </div>
         </div>
 
-        {/* Seletor de Parcelamento (só para cartão) */}
-        {paymentMethod === 'card' && (
-          <div className="mb-8 pb-8 border-b border-dark-border">
-            <label className="block text-sm font-medium text-white mb-3">
-              Número de Parcelas
-            </label>
-            <select
-              value={installments}
-              onChange={(e) => setInstallments(parseInt(e.target.value))}
-              className="input-base"
-            >
-              {Array.from({ length: 12 }, (_, i) => {
-                const parcelas = i + 1
-                const valorParcela = ((plan.price_cents / 100) / parcelas).toLocaleString('pt-BR', {
-                  minimumFractionDigits: 2,
-                })
-                return (
-                  <option key={parcelas} value={parcelas}>
-                    {parcelas}x de R$ {valorParcela}
-                    {parcelas === 1 ? ' (à vista)' : ''}
-                  </option>
-                )
-              })}
-            </select>
-            <p className="text-xs text-neutral-400 mt-2">
-              Primeira parcela no débito, as demais com intervalo de 30 dias
-            </p>
-          </div>
-        )}
 
         {/* Botão de Ação */}
         {paymentMethod === 'pix' ? (
@@ -146,7 +116,7 @@ export default function PaymentForm({ plan, isAuthenticated, currentUser }) {
           <CardTab.TriggerButton
             plan={plan}
             customerData={customerData}
-            installments={installments}
+            installments={1}
             isValid={formValid}
             onCheckoutStarted={handleCheckoutComplete}
             setLoading={setLoading}

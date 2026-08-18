@@ -85,11 +85,11 @@ function CardDisplay({ transactionData, plan, onBack }) {
           </div>
 
           <div>
-            <p className="font-medium text-white mb-2">💳 Parcelamento em até 12x</p>
+            <p className="font-medium text-white mb-2">💳 Pagamento à Vista</p>
             <p className="text-neutral-400 text-xs">
-              Você selecionou {transactionData.installments}x de{' '}
+              Pagamento único de{' '}
               <span className="text-accent font-semibold">
-                R$ {((plan.price_cents / transactionData.installments) / 100).toLocaleString('pt-BR')}
+                R$ {(plan.price_cents / 100).toLocaleString('pt-BR')}
               </span>
             </p>
           </div>
