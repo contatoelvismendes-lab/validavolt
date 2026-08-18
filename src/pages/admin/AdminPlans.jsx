@@ -61,7 +61,17 @@ export default function AdminPlans() {
 
       if (error) throw error
       if (data && data.length > 0) {
-        setPlans(data)
+        // Mapear campos do banco para o frontend
+        const mappedPlans = data.map(p => ({
+          id: p.id,
+          name: p.name,
+          price: p.price_cents,
+          credits: p.credits,
+          benefits: p.features || [],
+          active: p.active,
+          featured: p.featured
+        }))
+        setPlans(mappedPlans)
       }
     } catch (error) {
       console.error('Plans fetch error:', error)
