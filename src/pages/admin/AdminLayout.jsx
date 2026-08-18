@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { BarChart3, Users, CreditCard, Receipt, FileText, LogOut, Menu, X } from 'lucide-react'
+import { BarChart3, Users, CreditCard, Receipt, FileText, LogOut, Menu, X, Settings as SettingsIcon } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 export default function AdminLayout() {
@@ -13,7 +13,8 @@ export default function AdminLayout() {
     { path: '/admin/planos', label: 'Planos & Preços', icon: CreditCard },
     { path: '/admin/usuarios', label: 'Usuários', icon: Users },
     { path: '/admin/transacoes', label: 'Transações', icon: Receipt },
-    { path: '/admin/laudos', label: 'Auditoria de Laudos', icon: FileText }
+    { path: '/admin/laudos', label: 'Auditoria de Laudos', icon: FileText },
+    { path: '/admin/configuracoes', label: 'Configurações', icon: SettingsIcon }
   ]
 
   const isActive = (path) => location.pathname === path
