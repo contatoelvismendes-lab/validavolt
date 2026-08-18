@@ -26,6 +26,7 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminTransactions from './pages/admin/AdminTransactions'
 import AdminReports from './pages/admin/AdminReports'
 import AdminSettings from './pages/admin/AdminSettings'
+import AdminProfile from './pages/admin/AdminProfile'
 
 // Validação pública via QR Code
 import ValidatePublicPage from './pages/public/ValidatePublicPage'
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/admin/transacoes" element={<AdminTransactions />} />
                 <Route path="/admin/laudos" element={<AdminReports />} />
                 <Route path="/admin/configuracoes" element={<AdminSettings />} />
+                <Route path="/admin/perfil" element={<AdminProfile />} />
               </Route>
             </Route>
 
