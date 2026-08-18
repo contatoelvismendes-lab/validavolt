@@ -1,12 +1,30 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
-const INFINITEPAY_API_KEY = Deno.env.get("INFINITEPAY_API_KEY")
 const INFINITEPAY_BASE_URL = "https://api.infinitepay.io/v1"
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
+async function getInfinitePayKey() {
+  try {
+    const { data, error } = await supabase
+      .from("system_settings")
+      .select("value")
+      .eq("key", "INFINITEPAY_API_KEY")
+      .single()
+
+    if (error || !data?.value) {
+      throw new Error("INFINITEPAY_API_KEY not configured in system settings")
+    }
+
+    return data.value
+  } catch (err) {
+    console.error("Failed to fetch API key from settings:", err)
+    throw err
+  }
+}
 
 interface CheckoutRequest {
   planoId: string
@@ -37,12 +55,13 @@ interface CardResponse {
 async function createPixCharge(
   amount: number,
   orderId: string,
-  customerData: CheckoutRequest["customerData"]
+  customerData: CheckoutRequest["customerData"],
+  apiKey: string
 ): Promise<PixResponse> {
   const response = await fetch(`${INFINITEPAY_BASE_URL}/charges`, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${INFINITEPAY_API_KEY}`,
+      "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -73,12 +92,13 @@ async function createCardCharge(
   amount: number,
   orderId: string,
   installments: number,
-  customerData: CheckoutRequest["customerData"]
+  customerData: CheckoutRequest["customerData"],
+  apiKey: string
 ): Promise<CardResponse> {
   const response = await fetch(`${INFINITEPAY_BASE_URL}/charges`, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${INFINITEPAY_API_KEY}`,
+      "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -136,6 +156,9 @@ serve(async (req) => {
       )
     }
 
+    // Buscar chave da API
+    const apiKey = await getInfinitePayKey()
+
     // Buscar plano
     const { data: plano, error: planoError } = await supabase
       .from("planos")
@@ -168,14 +191,16 @@ serve(async (req) => {
       chargeResponse = await createPixCharge(
         plano.price_cents,
         orderId,
-        payload.customerData
+        payload.customerData,
+        apiKey
       )
     } else {
       chargeResponse = await createCardCharge(
         plano.price_cents,
         orderId,
         installments,
-        payload.customerData
+        payload.customerData,
+        apiKey
       )
     }
 
