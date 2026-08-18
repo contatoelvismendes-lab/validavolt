@@ -164,8 +164,9 @@ export default function AdminPlans() {
                     <label className="block text-sm font-medium text-white mb-2">Preço (R$)</label>
                     <input
                       type="number"
-                      value={plan.price}
-                      onChange={(e) => updatePlan(plan.id, 'price', parseInt(e.target.value))}
+                      step="0.01"
+                      value={plan.price / 100}
+                      onChange={(e) => updatePlan(plan.id, 'price', Math.round(parseFloat(e.target.value) * 100))}
                       className="input-base"
                     />
                   </div>
