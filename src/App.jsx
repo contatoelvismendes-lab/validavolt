@@ -17,8 +17,13 @@ import ShopOwnerDashboard from './pages/shopowner/ShopOwnerDashboard'
 import EmployeeManagement from './pages/shopowner/EmployeeManagement'
 
 // Admin
-import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
+import AdminLayout from './pages/admin/AdminLayout'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminPlans from './pages/admin/AdminPlans'
+import AdminUsers from './pages/admin/AdminUsers'
+import AdminTransactions from './pages/admin/AdminTransactions'
+import AdminReports from './pages/admin/AdminReports'
 
 // Validação pública via QR Code
 import ValidatePublicPage from './pages/public/ValidatePublicPage'
@@ -42,9 +47,15 @@ function App() {
             {/* Admin Login (portal separado) */}
             <Route path="/admin-login" element={<AdminLoginPage />} />
 
-            {/* Admin Dashboard (protegido) */}
+            {/* Admin Dashboard (protegido com múltiplas páginas) */}
             <Route element={<ProtectedRoute requiredRole="admin" />}>
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route element={<AdminLayout />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/planos" element={<AdminPlans />} />
+                <Route path="/admin/usuarios" element={<AdminUsers />} />
+                <Route path="/admin/transacoes" element={<AdminTransactions />} />
+                <Route path="/admin/laudos" element={<AdminReports />} />
+              </Route>
             </Route>
 
             {/* Validação Pública (sem autenticação) */}
