@@ -29,24 +29,34 @@ export default function AdminUsers() {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const { data: profilesData, error } = await supabase
+
+      // Buscar profiles
+      const { data: profilesData, error: profileError } = await supabase
         .from('user_profiles')
-        .select(`
-          id,
-          full_name,
-          email,
-          role,
-          cnpj_cpf,
-          created_at,
-          user_credits(balance)
-        `)
+        .select('id, full_name, email, role, cnpj_cpf, created_at')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (profileError) {
+        console.error('Profile fetch detailed error:', profileError)
+        throw profileError
+      }
+
+      console.log('Profiles fetched:', profilesData)
+
+      // Buscar créditos
+      const { data: creditsData } = await supabase
+        .from('user_credits')
+        .select('user_id, balance')
+
+      // Mapear créditos aos profiles
+      const creditsMap = {}
+      creditsData?.forEach(c => {
+        creditsMap[c.user_id] = c.balance
+      })
 
       const userData = profilesData.map(profile => ({
         ...profile,
-        credits: profile.user_credits?.[0]?.balance || 0
+        credits: creditsMap[profile.id] || 0
       }))
 
       setUsers(userData)
