@@ -33,8 +33,7 @@ export default function AdminUsers() {
       // Buscar profiles
       const { data: profilesData, error: profileError } = await supabase
         .from('user_profiles')
-        .select('id, full_name, email, role, cnpj_cpf, created_at')
-        .order('created_at', { ascending: false })
+        .select('*')
 
       if (profileError) {
         console.error('Profile fetch detailed error:', profileError)
