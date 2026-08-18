@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* Importar Inter Font */
-@import url('https://rsms.me/inter/inter.css');
+/* Font importada via system-ui fallback */;
 
 /* Root Theme */
 :root {
