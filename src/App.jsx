@@ -11,6 +11,7 @@ import DashboardPage from './pages/dashboard/DashboardPage'
 import DiagnosticPage from './pages/diagnostic/DiagnosticPage'
 import ReportPage from './pages/report/ReportPage'
 import PlansPage from './pages/plans/PlansPage'
+import CheckoutPage from './pages/checkout/CheckoutPage'
 
 // Páginas de Lojista (B2B)
 import ShopOwnerDashboard from './pages/shopowner/ShopOwnerDashboard'
@@ -60,6 +61,9 @@ function App() {
 
             {/* Validação Pública (sem autenticação) */}
             <Route path="/v/:reportId" element={<ValidatePublicPage />} />
+
+            {/* Checkout (público) */}
+            <Route path="/checkout/:planoId" element={<CheckoutPage />} />
 
             {/* Rotas Protegidas - Usuário Comum (Car Hunter/Revenda/Vistoriadora) */}
             <Route element={<ProtectedRoute />}>
