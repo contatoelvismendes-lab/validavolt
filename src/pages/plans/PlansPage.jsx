@@ -1,12 +1,8 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
 import { Check, Zap } from 'lucide-react'
 
 export default function PlansPage() {
   const navigate = useNavigate()
-  const { profile } = useAuth()
-  const [selectedPlan, setSelectedPlan] = useState(null)
 
   const plans = [
     {
@@ -105,7 +101,7 @@ export default function PlansPage() {
               </div>
 
               <button
-                onClick={() => setSelectedPlan(plan.id)}
+                onClick={() => navigate(`/checkout/${plan.id}`)}
                 className={`w-full mb-6 py-3 rounded-lg font-semibold transition-colors ${
                   plan.popular
                     ? 'btn-primary'
@@ -137,7 +133,7 @@ export default function PlansPage() {
               { credits: 10, price: 799 },
               { credits: 20, price: 1499 }
             ].map((pack) => (
-              <button
+              <div
                 key={pack.credits}
                 className="card-base hover:border-accent hover:bg-accent/5 transition-all"
               >
@@ -149,8 +145,13 @@ export default function PlansPage() {
                 <p className="text-xs text-neutral-400">
                   R$ {(pack.price / pack.credits).toFixed(2)}/laudo
                 </p>
-                <button className="btn-secondary w-full mt-4">Comprar</button>
-              </button>
+                <button
+                  onClick={() => navigate('/checkout/laudo_avulso')}
+                  className="btn-secondary w-full mt-4"
+                >
+                  Comprar
+                </button>
+              </div>
             ))}
           </div>
         </div>
