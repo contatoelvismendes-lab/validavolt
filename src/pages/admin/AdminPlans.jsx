@@ -73,9 +73,21 @@ export default function AdminPlans() {
   const handleSavePlan = async (plan) => {
     try {
       setSaving(true)
+
+      // Mapear campos do frontend para o banco
+      const dbPlan = {
+        id: plan.id,
+        name: plan.name,
+        price_cents: plan.price,
+        credits: plan.credits,
+        features: plan.benefits,
+        active: plan.active,
+        featured: plan.featured
+      }
+
       const { error } = await supabase
         .from('planos')
-        .upsert(plan)
+        .upsert(dbPlan)
 
       if (error) throw error
 
@@ -84,7 +96,7 @@ export default function AdminPlans() {
       setTimeout(() => setMessage(null), 3000)
     } catch (error) {
       console.error('Save error:', error)
-      setMessage({ type: 'error', text: 'Erro ao salvar plano' })
+      setMessage({ type: 'error', text: 'Erro ao salvar plano: ' + error.message })
     } finally {
       setSaving(false)
     }
