@@ -15,6 +15,15 @@ const ProtectedRoute = ({ requiredRole = null }) => {
     )
   }
 
+  // Para rotas admin
+  if (requiredRole === 'admin') {
+    if (!isAuthenticated || profile?.role !== 'admin') {
+      return <Navigate to="/admin-login" replace />
+    }
+    return <Outlet />
+  }
+
+  // Para rotas de usuário regular
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />
   }

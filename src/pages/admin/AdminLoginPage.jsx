@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { AlertCircle, Lock, Mail, Zap } from 'lucide-react'
 
 export default function AdminLoginPage() {
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { login, profile } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [formData, setFormData] = useState({ email: '', password: '' })
@@ -29,7 +29,14 @@ export default function AdminLoginPage() {
       )
 
       if (success) {
-        navigate('/admin')
+        // Aguardar um tick para o profile ser atualizado
+        setTimeout(() => {
+          if (profile?.role === 'admin') {
+            navigate('/admin')
+          } else {
+            setError('Acesso negado. Apenas administradores podem acessar este painel.')
+          }
+        }, 100)
       } else {
         setError(loginError || 'Falha ao fazer login')
       }

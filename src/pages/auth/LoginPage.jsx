@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { AlertCircle, Mail, Lock, Zap } from 'lucide-react'
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { login, profile } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [formData, setFormData] = useState({ email: '', password: '' })
@@ -29,7 +29,15 @@ export default function LoginPage() {
       )
 
       if (success) {
-        navigate('/painel')
+        // Aguardar um tick para o profile ser atualizado
+        setTimeout(() => {
+          // Redirecionar baseado no role
+          if (profile?.role === 'admin') {
+            navigate('/admin')
+          } else {
+            navigate('/painel')
+          }
+        }, 100)
       } else {
         setError(loginError || 'Falha ao fazer login')
       }
