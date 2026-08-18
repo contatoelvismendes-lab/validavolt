@@ -18,6 +18,7 @@ import EmployeeManagement from './pages/shopowner/EmployeeManagement'
 
 // Admin
 import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminLoginPage from './pages/admin/AdminLoginPage'
 
 // Validação pública via QR Code
 import ValidatePublicPage from './pages/public/ValidatePublicPage'
@@ -37,6 +38,9 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/cadastro" element={<SignupPage />} />
             </Route>
+
+            {/* Admin Login (portal separado) */}
+            <Route path="/admin-login" element={<AdminLoginPage />} />
 
             {/* Validação Pública (sem autenticação) */}
             <Route path="/v/:reportId" element={<ValidatePublicPage />} />
