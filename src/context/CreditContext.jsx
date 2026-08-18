@@ -14,20 +14,6 @@ export const CreditProvider = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user?.id) {
       fetchCredits()
-
-      // Assinar mudanças em tempo real
-      const subscription = supabase
-        .from('user_credits')
-        .on('*', payload => {
-          if (payload.new.user_id === user.id) {
-            setCredits(payload.new.balance)
-          }
-        })
-        .subscribe()
-
-      return () => {
-        subscription.unsubscribe()
-      }
     } else {
       setLoading(false)
     }
