@@ -5,8 +5,35 @@ import { ArrowLeft, AlertCircle, Zap } from 'lucide-react'
 
 export default function DiagnosticPage() {
   const navigate = useNavigate()
-  const { credits, hasEnoughCredits } = useCredits()
+  const { credits, hasEnoughCredits, deductCredit } = useCredits()
   const [step, setStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const handleGenerateReport = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      // Deduzir 1 crédito
+      const { success, error: creditError } = await deductCredit(1)
+
+      if (!success) {
+        setError(creditError || 'Erro ao deduzir crédito')
+        return
+      }
+
+      // Gerar ID do laudo
+      const reportId = crypto.randomUUID()
+
+      // Redirecionar para a página do laudo
+      navigate(`/laudo/${reportId}`)
+    } catch (err) {
+      setError('Erro ao gerar laudo: ' + err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (!hasEnoughCredits()) {
     return (
@@ -183,7 +210,27 @@ export default function DiagnosticPage() {
                 </div>
               </div>
 
-              <button className="btn-primary w-full">Gerar Laudo</button>
+              {error && (
+                <div className="flex gap-3 p-4 rounded-lg bg-red-900/20 border border-red-600/30 mb-4">
+                  <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-red-400 text-sm">{error}</p>
+                </div>
+              )}
+
+              <button
+                onClick={handleGenerateReport}
+                disabled={loading}
+                className="btn-primary w-full"
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-dark-bg border-t-transparent rounded-full animate-spin"></div>
+                    Gerando laudo...
+                  </div>
+                ) : (
+                  'Gerar Laudo (1 crédito)'
+                )}
+              </button>
             </div>
           )}
         </div>

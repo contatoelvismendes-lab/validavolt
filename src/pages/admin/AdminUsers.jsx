@@ -30,38 +30,26 @@ export default function AdminUsers() {
     try {
       setLoading(true)
 
-      // Buscar profiles
-      const { data: profilesData, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('*')
+      // Query ultra-simples
+      const { data, error } = await supabase.rpc('get_users_with_credits')
 
-      if (profileError) {
-        console.error('Profile fetch detailed error:', profileError)
-        throw profileError
+      if (error) {
+        console.error('RPC error:', error)
+        throw error
       }
 
-      console.log('Profiles fetched:', profilesData)
-
-      // Buscar créditos
-      const { data: creditsData } = await supabase
-        .from('user_credits')
-        .select('user_id, balance')
-
-      // Mapear créditos aos profiles
-      const creditsMap = {}
-      creditsData?.forEach(c => {
-        creditsMap[c.user_id] = c.balance
-      })
-
-      const userData = profilesData.map(profile => ({
-        ...profile,
-        credits: creditsMap[profile.id] || 0
-      }))
-
-      setUsers(userData)
-      setFilteredUsers(userData)
+      setUsers(data || [])
+      setFilteredUsers(data || [])
     } catch (error) {
       console.error('Users fetch error:', error)
+      // Fallback: tenta query simples
+      try {
+        const { data: fallback } = await supabase.from('user_profiles').select('id,email,full_name,role,created_at')
+        setUsers(fallback || [])
+        setFilteredUsers(fallback || [])
+      } catch (err) {
+        console.error('Fallback error:', err)
+      }
     } finally {
       setLoading(false)
     }
