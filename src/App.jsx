@@ -41,7 +41,11 @@ function App() {
 
             {/* Admin Login (portal separado) */}
             <Route path="/admin-login" element={<AdminLoginPage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+
+            {/* Admin Dashboard (protegido) */}
+            <Route element={<ProtectedRoute requiredRole="admin" />}>
+              <Route path="/admin" element={<AdminDashboard />} />
+            </Route>
 
             {/* Validação Pública (sem autenticação) */}
             <Route path="/v/:reportId" element={<ValidatePublicPage />} />
