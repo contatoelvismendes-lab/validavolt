@@ -41,6 +41,7 @@ function App() {
 
             {/* Admin Login (portal separado) */}
             <Route path="/admin-login" element={<AdminLoginPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
 
             {/* Validação Pública (sem autenticação) */}
             <Route path="/v/:reportId" element={<ValidatePublicPage />} />
@@ -59,10 +60,6 @@ function App() {
               <Route path="/lojista/funcionarios" element={<EmployeeManagement />} />
             </Route>
 
-            {/* Rotas Protegidas - Super Admin */}
-            <Route element={<ProtectedRoute requiredRole="admin" />}>
-              <Route path="/admin" element={<AdminDashboard />} />
-            </Route>
 
             {/* Fallback */}
             <Route path="/" element={<LoginPage />} />
